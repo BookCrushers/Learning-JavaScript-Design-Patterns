@@ -10,8 +10,8 @@
 ## 일정
 
 - [x] Day1 - Chapter1 ~ Chapter4
-- [ ] Day2 - Chapter5
-- [ ] Day3 - Chapter6 ~ Chapter7.10
+- [x] Day2 - Chapter5 ~ Chapter6
+- [ ] Day3 - Chapter7.1 ~ Chapter7.10
 - [ ] Day4 - Chapater7.11 ~ Chapter7.21
 - [ ] Day5 - Chapter8
 - [ ] Day6 - Chapter9
