@@ -12,16 +12,17 @@
 - [x] Day1 - Chapter1 ~ Chapter4
 - [x] Day2 - Chapter5 ~ Chapter6
 - [x] Day3 - Chapter7.1 ~ Chapter7.10
-- [ ] Day4 - Chapater7.11 ~ Chapter7.21
-- [ ] Day5 - Chapter8
-- [ ] Day6 - Chapter9
-- [ ] Day7 - Chapter10
-- [ ] Day8 - Chapter11
+- [ ] Day4 - Chapater7.11 ~ Chapter7.17
+- [ ] Day5 - Chapter7.18 ~ Chapter7.21
+- [ ] Day6 - Chapter8
+- [ ] Day7 - Chapter9
+- [ ] Day8 - Chapter10
 - [ ] Day9 - Chapter12
-- [ ] Day10 - Chapter13
-- [ ] Day11 - Chapter14
-- [ ] Day12 - Chapter15, 회고 1
-- [ ] Day13 - 블로그 후기 작성 후 회고 2
+- [ ] Day10 - Chapter12
+- [ ] Day11 - Chapter13
+- [ ] Day12 - Chapter14
+- [ ] Day13 - Chapter15, 회고 1
+- [ ] Day14 - 블로그 후기 작성 후 회고 2
 
 ### 세부 사항
 - 책 읽고, 인사이트 작성
@@ -40,3 +41,4 @@
 - [Day1](./Day1.md)
 - [Day2](./Day2.md)
 - [Day3](./Day3.md)
+- [Day4](./Day4.md)
