@@ -12,7 +12,7 @@
 - [x] Day1 - Chapter1 ~ Chapter4
 - [x] Day2 - Chapter5 ~ Chapter6
 - [x] Day3 - Chapter7.1 ~ Chapter7.10
-- [ ] Day4 - Chapater7.11 ~ Chapter7.17
+- [ ] Day4 - Chapter7.11 ~ Chapter7.17
 - [ ] Day5 - Chapter7.18 ~ Chapter7.21
 - [ ] Day6 - Chapter8
 - [ ] Day7 - Chapter9
