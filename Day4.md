@@ -292,5 +292,163 @@
 ### Dennis
 
 #### ✈️ 내용 정리
+서브클래싱
+- 부모 클래스의 속성을 상속받아서 새로운 객체를 생성하는 걸 뜻 함
+- 믹스인과 데코레이터 패턴 또한 서브 클래싱의 다른 방법
+
+믹스인
+- Mixin은 상속 없이 어떤 객체나 클래스에 재사용 가능한 기능을 추가할 수 있는 객체이다.
+- 동적 클래스 생성을 위해서 고차 함수와 익명 Class를 통해서 만들 수 있지만 Object.assign으로도 만들 수 있다.
+- 다만, 논쟁의 여지가 남아있는 패턴, 프로토타입 오염과 함수의 추처에 대한 불확실성 초래
+
+데코레이터 패턴
+- 코드 재사용을 목표로 하는 구조 패턴
+- 클래스에 인스턴스를 만들고 인스턴스에 메소드를 추가하는 듯한 패턴
+
+추상 데코레이터 패턴
+- 인터페이스와 함께 사용하여 추상 데코레이터 클래스를 생성하고 확장할 클래스를 만든다.
+- 베이스 클래스를 인자로 받아서 확장할 클래스를 사용한다.
+- 주의할 점은네임 스페이스에 작고 비슷한 객체를 추가하기 때문에, 구조를 복잡하게 만들 수 있다.
+
+플라이웨이트 패턴
+- 반복되고 느리고 비효율적으로 데이터를 공유하는 코드를 최적화하는 전통적인 구조적 패턴
+```js
+// 믹스인
+let sayHiMixin = {
+  sayHi() {
+    alert(`Hello ${this.name}`);
+  },
+  sayBye() {
+    alert(`Bye ${this.name}`);
+  }
+};
+
+// 사용법:
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// 메서드 복사
+Object.assign(User.prototype, sayHiMixin);
+
+// 이제 User가 인사를 할 수 있습니다.
+new User("Dude").sayHi(); // Hello Dude!
+```
 
 #### 👀 인사이트
+
+**익명 클래스의 사용 방법**
+
+**믹스인은 왜 사용하는걸까?**
+자바스크립트에서는 단일 상속만 가능하기 때문에 단일 상속으로는 해결할 수 없는 다중 상속이 필요할 때 유용하다.
+```js
+class Animal {
+  eat() {
+    console.log('Eating...');
+  }
+}
+
+class Bird extends Animal {
+  fly() {
+    console.log('Flying...');
+  }
+}
+
+class Fish extends Animal {
+  swim() {
+    console.log('Swimming...');
+  }
+}
+
+// 새면서도 수영할 수 있는 펭귄은? 상속으로는 해결하기 어려움
+class Penguin extends Bird, Fish {} // ❌
+```
+```js
+
+const FlyMixin = {
+  fly() {
+    console.log('Flying...');
+  }
+};
+
+const SwimMixin = {
+  swim() {
+    console.log('Swimming...');
+  }
+};
+
+class Penguin {
+  eat() {
+    console.log('Eating...');
+  }
+}
+
+Object.assign(Penguin.prototype, SwimMixin);
+
+const penguin = new Penguin();
+penguin.eat(); // Eating...
+penguin.swim(); // Swimming...
+```
+
+**인터페이스를 지원하지 않는 자바스크립트에서 인터페이스를 만드는 법**
+Constructor 내부에서 미리 생성한 interface 함수를 통해서 validation 한다.
+그냥 타입스크립트 사용하자
+
+**자바스크립트의 데코레이터 **
+```js
+function logDecorator(func) {
+  return function (...args) {
+    console.log(`Calling ${func.name} with arguments:`, args);
+    return func.apply(this, args);
+  };
+}
+
+class Calculator {
+  constructor(value) {
+    this.value = value;
+  }
+
+  add(num) {
+    return this.value + num;
+  }
+}
+
+// 특정 메서드에 데코레이터 적용
+Calculator.prototype.add = logDecorator(Calculator.prototype.add);
+
+const calc = new Calculator(10);
+console.log(calc.add(5)); // Calling add with arguments: [5]
+
+```
+
+최신 문법
+
+```js
+function log(target, key, descriptor) {
+  const originalMethod = descriptor.value;
+
+  descriptor.value = function (...args) {
+    console.log(`Calling ${key} with arguments:`, args);
+    return originalMethod.apply(this, args);
+  };
+
+  return descriptor;
+}
+
+class Calculator {
+  constructor(value) {
+    this.value = value;
+  }
+
+  @log
+  add(num) {
+    return this.value + num;
+  }
+}
+
+const calc = new Calculator(10);
+console.log(calc.add(5)); // Calling add with arguments: [5]
+
+```
