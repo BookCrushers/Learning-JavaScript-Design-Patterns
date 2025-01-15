@@ -1,4 +1,4 @@
-## Day4
+## Day5
 
 ### Elio
 
@@ -40,24 +40,24 @@
         constructor() {
           this.observerList = [];
         }
-
+    
         add(obj) {
           return this.observerList.push(obj);
         }
-
+    
         count() {
           return this.observerList.length;
         }
-
+    
         get(index) {
           if (index > -1 && index < this.observerList.length) {
             return this.observerList[index];
           }
         }
-
+    
         indexOf(obj, startIndex) {
           let i = startIndex;
-
+    
           while (i < this.observerList.length) {
             if (this.observerList[i] === obj) {
               return i;
@@ -66,26 +66,26 @@
           }
           return -1;
         }
-
+    
         removeAt(index) {
           this.observerList.splice(index, 1);
         }
       }
-
+    
       class Subject {
         constructor() {
           this.observers = new ObserverList();
         }
-
+    
         addObserver(observer) {
           this.observers.add(observer);
         }
-
+    
         removeObserver(observer) {
           const index = this.observers.indexOf(observer, 0);
           this.observers.removeAt(index);
         }
-
+    
         notify(context) {
           const observerCount = this.observers.count();
           for (let i = 0; i < observerCount; i++) {
@@ -93,13 +93,13 @@
           }
         }
       }
-
+    
       class Observer {
         constructor() {}
-
+    
         update() {}
       }
-
+    
       class ConcreteObserver extends Observer {
         constructor(element) {
           super();
@@ -109,29 +109,29 @@
           this.element.checked = checked;
         }
       }
-
+    
       class ConcreteSubject extends Subject {
         constructor(element) {
           super();
           this.element = element;
         }
       }
-
+    
       const addObserverButton = document.querySelector("#addNewObserver");
       const observersContainer = document.querySelector("#observersContainer");
       const mainCheckbox = document.querySelector("#mainCheckbox");
-
+    
       const concreteSubject = new ConcreteSubject(mainCheckbox);
-
+    
       mainCheckbox.addEventListener("input", (e) => {
         concreteSubject.notify(e.target.checked);
       });
-
+    
       addObserverButton.addEventListener("click", () => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         observersContainer.append(checkbox);
-
+    
         const observer = new ConcreteObserver(checkbox);
         concreteSubject.addObserver(observer);
       });
@@ -163,36 +163,36 @@
         this.topics = {};
         this.subUid = -1;
       }
-
+    
       publish(topic, args) {
         if (!this.topics[topic]) {
           return false;
         }
-
+    
         const subscribers = this.topics[topic];
         let len = subscribers ? subscribers.length : 0;
-
+    
         while (len--) {
           subscribers[len].func(topic, args);
         }
-
+    
         return this;
       }
-
+    
       subscribe(topic, func) {
         if (!this.topics[topic]) {
           this.topics[topic] = [];
         }
-
+    
         const token = (++this.subUid).toString();
         this.topics[topic].push({
           token,
           func,
         });
-
+    
         return token;
       }
-
+    
       unsubscribe(token) {
         for (const m in this.topics) {
           if (this.topics[m]) {
@@ -207,13 +207,13 @@
       }
     }
     const pubsub = new PubSub();
-
+    
     const messageLogger = (topics, data) => {
       console.log(`Logging: ${topics}: ${data}`);
     };
-
+    
     const subscription = pubsub.subscribe("inbox/newMessage", messageLogger);
-
+    
     pubsub.publish("inbox/newMessage", "hello world");
     ```
 
@@ -241,16 +241,16 @@
     requestInfo(model, id) {
       return `The information for ${model} with ID ${id} is foobar`;
     },
-
+  
     buyVehicle(model, id) {
       return `You have successfully purchased Item ${id}, a ${model}`;
     },
-
+  
     arrangeViewing(model, id) {
       return `You have booked a viewing of ${model} (${id})`;
     },
   };
-
+  
   CarManager.execute = function (name) {
     return (
       CarManager[name] &&
@@ -262,7 +262,7 @@
     // 첫 번째 인자는 this, 그리고 인자로 전달할 배열
     // [].slice.call(arguments, 1)는 유사 배열 객체에 slice를 적용하여 배열로 변환하는 기술
   };
-
+  
   console.log(CarManager.execute("arrangeViewing", "Ferrari", "14523"));
   ```
 
