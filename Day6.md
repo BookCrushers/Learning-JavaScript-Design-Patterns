@@ -138,5 +138,100 @@
 
 #### ✈️ 내용 정리
 
+애플리케이션 설계에는 객체의 설계와 애플리케이션 아키텍처라는 두 가지 중요한 측면이 있다.
+
+이전까지 학습한 내용은 객체의 설계에 관련된 내용이며 다음 내용은 애플리케이션 아케텍처에 관한 이야기이다.
+
+**MVC패턴**
+
+비즈니스 데이터(Model)과 UI(View)를 분리하고 Controller가 로직과 사용자의 입력을 관리하는 구조
+- 관찰자 패턴이 MVC 아키텍처의 일부로 포함됨 (뷰가 모델을 관찰함)
+- 뷰는 **모델을 관찰하고 시각적 표현(UI)를 최신 상태로 유지하는 객체**
+- 컨트롤러는 모델과 뷰 사이에 중재자 역할을 하며, 일반적으로 사용자가 뷰를 조작할 때 모델을 업데이트 하는 역할을 함
+- MVC 패턴을 사용하는 이유
+  - 전반적인 유지보수의 단순화 : 애플리케이션을 업데이트 해야할 때, 변경사항이 모델과 컨트롤러에 의한 데이터 중심인지, 단순히 시각적 변경인지 명확하게 구분 가능
+  - 모델과 뷰의 분리 : 비즈니스 로직에 대한 단위 테스트가 간편해짐
+  - 애플리케이션 전반에 하위 수준의 모델 및 컨트롤러 코드 중복이 제거됨
+  - 모듈화를 통해 코어 로직 담당자와 UI 개발자가 동시에 작업 가능 (협업 향상)
+- MVC 패턴의 다른 관점
+  - GoF에서는 MVC를 디자인 패턴이 아닌** UI를 구축하기 위한 클래스들의 집합**으로 간주함
+  - 또한 MVC는 관찰자, 전략, 컴포지트의 세가지 전통적인 패턴의 변형이라 판단
+**MVP패턴**
+
+프레젠테이션 로직의 개선에 초점을 맞춘 MVC패턴의 파생 패턴
+- 모델, 뷰, 프리젠터로 이루어져있음
+- 프리젠터는 뷰에 대한 UI 비즈니스 로직을 담당하며, 이벤트 호출은 뷰에서 프리젠터로 위임됨
+- MVP는 주로 수동형 뷰를 활용하는 구현 방식으로 가장 널리 사용됨
+- 프리젠터는 모델을 관찰하고 모델이 변경되면 뷰를 업데이트함
+```kotlin
+// View Interface
+interface LoginView {
+    fun showLoading()           // 로딩 표시
+    fun hideLoading()           // 로딩 숨김
+    fun showError(message: String)  // 에러 메시지 표시
+    fun navigateToHome()        // 홈 화면으로 이동
+}
+```
+```kotlin
+// Presenter Interface
+interface LoginPresenter {
+    fun onLoginButtonClicked(username: String, password: String)
+}
+```
+```kotlin
+class LoginPresenterImpl(private val view: LoginView) : LoginPresenter {
+
+    override fun onLoginButtonClicked(username: String, password: String) {
+        if (username.isEmpty() || password.isEmpty()) {
+            view.showError("Username or Password cannot be empty")
+            return
+        }
+
+        view.showLoading()
+        // 로그인 로직 처리 (예: 서버 요청)
+        // 여기서는 간단히 성공/실패 시나리오를 가정
+        val isSuccess = username == "user" && password == "pass"
+
+        view.hideLoading()
+        if (isSuccess) {
+            view.navigateToHome()
+        } else {
+            view.showError("Invalid credentials")
+        }
+    }
+}
+
+```
+**MVVM패턴**
+
+- 애플리케이션의 UI 개발 부분과 비즈니스 로직, 동작 부분을 명확하게 분리함
+- 구성요소
+  - 모델
+  - 뷰
+  - 뷰 모델
+- 많은 MVVM 패턴에서 선언적 데이터 바인딩을 활용하여 뷰에 대한 작업을 다른 계층과 분리할 수 있도록 함
+- 뷰는 상태를 관리할 책임이 없다. 뷰는 뷰 모델과 정보 또는 상태를 항상 동기화된 상태로 유지하기 때문이다.
+- 뷰 모델은 생각해보니 스토어와 유사하다는 생각이 듦
+- 장점
+  - UI와 이를 구동하게 해주는 요소를 동시 개발할 수 있음
+  - 뷰를 추상화함으로 써 뷰의 뒤에 작성되는 비즈니스 로직의 양으 줄여줌
+  - 뷰모델은 이벤트 중심 코드에 비해 단위 테스트가 더 쉬움
+  - 뷰모델은 UI 자동화나 상호작용에 대한 고려 없이 테스트 가능
+- 단점
+  - 단순한 UI에 적합하지 않음, 과도한 구현이 될 수 있음
+  - 데이터 바인딩은 선언적이고 편리하지만, 디버깅이 어려울 수 있음
+  - 데이터 바인딩이 상당한 관리 부담으로 이루어질 수 있음
+  - 대규모 애플리케이션에서 일반화를 제공하기위한 뷰모델을 설계하는게 어려울 수 있음
+  
+
+**MVC vs MVP**
+- MVP는 일반적으로 프리젠테이션 로직을 최대한 활용해야하는 엔터프라이즈 수준의 애플리케이션에서 사용
+- 뷰가 매우 복잡하고 사용자와의 상호작용이 많다면 MVC가 적합하지 않을 수 있음
+- MVC 패턴은 컨트롤러가 모델과 뷰를 이어주면서 결합도가 비교적으로 있음
+- MVP 패턴은 뷰와 모델의 완전한 분리를 목표로 함, 때문에 단위 테스트가 편해짐
+
+
 #### 👀 인사이트
 
+**Smalltalk-80**
+- 1970년대 초 미국 제록스(XEROX)사에서 개발된 객체 지향 프로그래밍(OOP) 분야에서 기초적인 아이디어를 제시한 언어
