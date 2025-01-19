@@ -14,7 +14,7 @@
 - [x] Day3 - Chapter7.1 ~ Chapter7.10
 - [x] Day4 - Chapter7.11 ~ Chapter7.17
 - [x] Day5 - Chapter7.18 ~ Chapter7.21
-- [ ] Day6 - Chapter8
+- [x] Day6 - Chapter8
 - [ ] Day7 - Chapter9
 - [ ] Day8 - Chapter10
 - [ ] Day9 - Chapter12
@@ -43,3 +43,4 @@
 - [Day3](./Day3.md)
 - [Day4](./Day4.md)
 - [Day5](./Day5.md)
+- [Day6](./Day6.md)
