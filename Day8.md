@@ -1,0 +1,116 @@
+## Day8
+
+### Elio
+
+#### ✈️ 내용 정리
+
+모둘형이란 의존성이 낮은 기능들이 모듈로써 저장된 형태를 뜻함
+
+이러한 느슨한 결합은 의존성을 제거하여 애플리케이션의 유지보수를 용이하게 만듦
+
+자바스크립트는 ES2015부터 네이티브 모듈을 도입했지만 아래 3가지 방식으로 모듈형 자바스크립트를 사용할 수 있었음
+
+- AMD
+- CommonJS
+- UMD
+
+#### 스크립트 로더
+
+- 스크립트 로더는 모듈형 자바스크립트를 구현하기 위한 핵심적인 도구
+- RequireJs, curl.js
+  - https://requirejs.org/docs/download.html
+
+#### AMD
+
+- 모듈과 의존성 모두를 비동기적으로 로드할 수 있도록 설계
+- 코드와 모듈 간 긴밀한 결합을 줄여줌
+- 자바스크립트 모듈화을 위한 주춧돌 역할을 함
+- CommonJS 모듈 형식에 대한 사양 초안으로 시작했으나 도입에 전체적인 합의를 이루지 못해 추가 개발은 amdjs 그룹에게 넘어감
+- CommonJS 진영의 모두가 AMD 형식을 지향하지 않기 때문에 AMD 또는 비동기 모듈 지원이라고 부르는 게 적절
+- 예시
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script data-main="main" src="require.js"></script>
+  </head>
+  <body></body>
+</html>
+```
+
+```js
+// main.js
+require(["greeting"], function (greeting) {
+  const message = greeting.greet("영준", 3, 4);
+  console.log(message); // 출력: Hello, 영준! Did you know that 3 + 4 equals 7?
+});
+
+// greeting.js
+define(["math"], function (math) {
+  return {
+    greet: function (name, a, b) {
+      const sum = math.add(a, b);
+      return `Hello, ${name}! Did you know that ${a} + ${b} equals ${sum}?`;
+    },
+  };
+});
+
+// math.js
+define([], function () {
+  return {
+    add: function (a, b) {
+      return a + b;
+    },
+    subtract: function (a, b) {
+      return a - b;
+    },
+  };
+});
+```
+
+#### CommonJS
+
+- 서버 사이드에서 모듈을 선언하는 간단한 API를 지정하는 모듈 제안
+- 케빈 당구르가 2009년에 ServerJS 프로젝트에서 만들어진 이 형식은 CommonJS 그룹에 의해 공식화됨
+- 모듈과 패키지, 두 가지에 대한 표준을 정립하려 노력
+- CommonJS 모듈은 재사용 가능한 자바스크립트 코드로써 외부 의존 코드에 공개할 특정 객체를 내보냄
+- CommonJS은 AMD처럼 모듈을 함수로 감싸는 작업이 필요하지 않음
+- exports 변수는 다른 모듈에 내보내고자 하는 객체를 담음
+- require 함수는 다른 모듈에서 내보낸 객체를 가져올 때 사용하는 함수
+- Node.js 환경에서는 CommonJs가 여전히 기본 형식
+  - .cjs
+  - package.json의 type이 commonjs인 경우
+  - type 항목이 존재하지 않는 경우, .js 확장자를 가진 파일
+  - .mjs, .cjs, .json, .node, .js 이외의 확장자를 가진 파일
+
+#### AMD vs CommonJS
+
+- AMD
+  - 브라우저 우선 접근 방식 채택
+  - 비동기 동작과 간소화된 하위 호환성 선택
+  - 파일 I/O의 개념은 없음
+  - 객체, 함수, 생성자, 문자열, JSON 등 다양한 모듈 지원
+  - 브라우저에서 자체적으로 실행됨
+- CommonJS
+  - 서버 우선 접근 방식
+  - 동기적 작동
+  - 전역 변수와의 독립성
+  - 미래의 서버 환경 고려
+
+#### UMD: 플러그인을 위한 AMD 및 CommonJS 호환 모듈
+
+- 브라우저와 서버 환경에서 모두 작동할 수 있는 모듈을 원하는 개발자에게는 기존 AMD와 CommonJS의 약점을 해결하는 방안 필요
+- 이를 위해 UMD 등장
+
+#### 👀 인사이트
+
+### Dennis
+
+#### ✈️ 내용 정리
+
+#### 👀 인사이트
+
