@@ -141,6 +141,16 @@ export default defineConfig({
 ### Dennis
 
 #### ✈️ 내용 정리
+AMD
+- define 메서드 : 모듈의 정의를 구현
+  ```js
+    define(
+      module_id // optional 생략하면 '익명 모듈'
+      [dependencies] //optional
+      definition function {} // 모듈이나 객체를 인스턴스화 하는 함수
+    )
+  ```
+- require 메소드 : 의존선 로딩을 처리
 
 #### 👀 인사이트
 
