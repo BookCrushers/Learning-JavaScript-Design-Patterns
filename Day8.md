@@ -108,6 +108,36 @@ define([], function () {
 
 #### 👀 인사이트
 
+#### CommonJS를 브라우저에서 써보기
+
+기본적으로 commonJS는 node.js 환경에서 실행 가능
+
+이에 따라 번들러 등을 통해 commonJs 모듈을 ES모듈로 변경해주어야 함
+
+```js
+// vite.config.js
+
+import { defineConfig } from "vite";
+import commonjs from "@rollup/plugin-commonjs";
+
+export default defineConfig({
+  plugins: [commonjs()],
+});
+```
+
+이미 ESM이 표준이지만 cjs는 아래와 같은 이유로 사용하는 경우가 있음
+
+- 호환성
+- 동적 require
+  - require은 if문 등에서 동적으로 사용 가능
+  - import문 정적, import문은 항상 파일의 최상단에 위치해야 하고, 코드 실행 전에 모든 import가 미리 처리됨
+
+#### ESM을 사용하는 것이 좋은 이유
+
+1. **명확한 표준**: ESM은 JavaScript의 공식 표준이므로, ECMAScript 사양에 맞춰져 있어 모든 최신 JavaScript 환경에서 일관되게 동작
+2. **성능**: ESM은 브라우저와 Node.js에서 더 효율적으로 작동할 수 있도록 최적화되어 있음. 예를 들어, ESM은 정적 분석을 통해 트리 쉐이킹(tree-shaking)과 같은 최적화를 더 잘 수행
+3. **미래지향적**: 최신 도구와 라이브러리들이 ESM을 기본으로 지원하므로, ESM을 사용하면 앞으로의 호환성 문제를 피할 수 있음
+
 ### Dennis
 
 #### ✈️ 내용 정리
