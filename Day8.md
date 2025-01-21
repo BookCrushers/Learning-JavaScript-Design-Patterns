@@ -141,7 +141,20 @@ export default defineConfig({
 ### Dennis
 
 #### ✈️ 내용 정리
+
+스크립트 로더
+
+- JavaScript에서 스크립트 로더는 동적으로 JavaScript 파일(스크립트)을 로드하고 관리하는 도구나 코드 패턴
+- 주요역할
+  - 비동기 로드: 스크립트를 HTML에 미리 포함하지 않고, 필요할 때 비동기적으로 로드
+  - 종속성 관리: 특정 스크립트가 다른 스크립트에 의존하는 경우, 올바른 순서로 로드
+  - 중복 방지: 동일한 스크립트를 여러 번 로드하지 않도록 방지
+  - 성능 최적화: 필요한 스크립트만 로드하여 초기 로딩 시간을 줄이고, 네트워크 리소스를 효율적으로 사용
+
 AMD
+
+- 브라우저에서 모듈 시스템을 사용하기 위해 개발된 모듈 시스템
+- RequireJS와 curl.js 라이브러리 활용하여 모듈 시스템 사용
 - define 메서드 : 모듈의 정의를 구현
   ```js
     define(
@@ -151,6 +164,72 @@ AMD
     )
   ```
 - require 메소드 : 의존선 로딩을 처리
+  ```js
+  require(['foo', 'bar'], function (foo, bar {
+    foo.doSomething()
+  }))
+  ```
+
+CommonJS
+
+- Node.js에서 기본적으로 사용하는 모듈 시스템.
+- 동기적으로 모듈을 로드(런타임에 종속성 결정).
+- require와 module.exports를 사용.
+  ```js
+  // 선언
+  function foo() {
+    console.log("foo");
+  }
+  exports.foo = foo;
+  ```
+  ```js
+  //import
+  var exampleModule = require(".example-10-7");
+  ```
+
+AMD vs CommonJS
+
+- AMD
+  - 브라우저 우선 접근 방식을 채택
+  - 비동기 동작과 간소화된 하위 호환성
+  - 파일 I/O에 대한 개념 없음
+  - 객체, 함수, 생성자, 문자열, JSON등 다양한 형태의 모듈을 지원
+  - 브라우저에서 자체적으로 실행되어 유연한 포맷 지원
+- CJS
+  - 서버 우선 접근 방식
+  - 동기적 작동
+  - 전역 변수와의 독립성
+  - 미래의 서버 환경 고려
+  - 언래핑된 모듈을 지원
 
 #### 👀 인사이트
 
+CJS
+
+- wrapping module
+
+  ```js
+  console.log(__filename); // 현재 파일의 절대 경로
+  console.log(module.exports); // 모듈의 exports 객체
+  ```
+
+  위 코드는 실제로 다음과 같이 실행
+
+  ```js
+  (function (exports, require, module, __filename, __dirname) {
+    console.log(__filename);
+    console.log(module.exports);
+  });
+  ```
+
+- unwrapping module
+- 위와같은 함수로 감싸지지 않은 상태로 실행되는 모듈 모듈 코드가 별도의 함수 스코프 없이 실행
+
+```js
+// example.js (언래핑된 모듈)
+console.log("This code runs in the global scope.");
+```
+
+CommonJS에서 언래핑된 모듈을 지원하는 이유
+
+- CommonJS는 모듈의 유연성을 높이기 위해 언래핑된 모듈도 지원
