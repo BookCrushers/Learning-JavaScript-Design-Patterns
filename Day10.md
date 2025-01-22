@@ -263,3 +263,72 @@ const Emoji = loadable(()=>import("./..."))
 #### ✈️ 내용 정리
 
 #### 👀 인사이트
+리액트 디자인 패턴
+- 고차 컴포넌트 패턴(HOC)
+    - 컴포넌트의 Props로 컴포넌트를 받아 새로운 컴포넌트를 반환하는 패턴
+    - 장점
+        - 재사용 가능 한 로직을 한 곳에 모아 관리 가능
+        - 횡단 관심사 처리 가능
+    - 단점
+        - 인자로 받은 컴포넌트에 props를 전달할 시 중복되는 속성명을 가지고있다면 덮어씌워질 수 있음
+        - 
+    ```js
+    import React from 'react';
+    import { useNavigate } from 'react-router-dom';
+
+    // HOC 정의
+    function withAuthorization(WrappedComponent) {
+    return function (props) {
+        const navigate = useNavigate();
+        const isAuthenticated = !!localStorage.getItem('authToken'); // 예시로 localStorage 사용
+
+        React.useEffect(() => {
+        if (!isAuthenticated) {
+            alert('로그인이 필요합니다.');
+            navigate('/login'); // 로그인 페이지로 리다이렉트
+        }
+        }, [isAuthenticated, navigate]);
+
+        // 인증된 경우에만 원래 컴포넌트를 렌더링
+        return isAuthenticated ? <WrappedComponent {...props} /> : null;
+    };
+    }
+
+    // 원래 컴포넌트
+    function Dashboard() {
+    return <h1>대시보드에 오신 것을 환영합니다!</h1>;
+    }
+
+    // HOC를 통해 보호된 컴포넌트
+    const ProtectedDashboard = withAuthorization(Dashboard);
+
+    export default ProtectedDashboard;
+    ```
+- 렌더링 Props 패턴
+    - 랜더링 props를 호출하는 함수를 생성하고 props를 통해서 랜더링할 컴포넌트를 받아서 처리하는 패턴
+    ```jsx
+    <Title render={()=><h1> am a render prop!</h1>} />
+
+    const Title = props => props.render()
+    ```
+    - 리액트에서는 상태 끌어올리를 통해서 자식의 상태를 부모에게 전달하는데 해당 과정을 줄일 수 있음
+    ```jsx
+    <Input>
+        render={(value) => (
+                <>
+                    <Kelvin value={value} />
+                    <Fahrenheit value={value} />
+                </>
+            )
+        }
+    ```
+- Hooks 패턴
+- 정적 가져오기
+- 동적 가져오기
+- 코드 스플리팅
+- PRPL 패턴
+- 로딩 우선순위
+
+
+#### 👀 인사이트
+
