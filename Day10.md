@@ -263,6 +263,7 @@ const Emoji = loadable(()=>import("./..."))
 #### ✈️ 내용 정리
 
 #### 👀 인사이트
+
 리액트 디자인 패턴
 - 고차 컴포넌트 패턴(HOC)
     - 컴포넌트의 Props로 컴포넌트를 받아 새로운 컴포넌트를 반환하는 패턴
@@ -306,6 +307,13 @@ const Emoji = loadable(()=>import("./..."))
     ```
 - 렌더링 Props 패턴
     - 랜더링 props를 호출하는 함수를 생성하고 props를 통해서 랜더링할 컴포넌트를 받아서 처리하는 패턴
+    - 장점
+        - 여러 컴포넌트 사이에 로직과 데이터를 쉽게 공유할 수 있음
+        - 컴포넌트 재사용성 높일 수 있음
+        - 고차 컴포넌트의 이름 충돌 문제 해결
+    - 단점
+        - Hooks가 props 패턴의 상위 호환 
+        - 라이프 사이클 메서드를 추가할 수 없음
     ```jsx
     <Title render={()=><h1> am a render prop!</h1>} />
 
@@ -323,12 +331,91 @@ const Emoji = loadable(()=>import("./..."))
         }
     ```
 - Hooks 패턴
+    - 컴포넌트간에 로직을 재사용하기 위해 등장 
+    - 함수형 컴포넌트에 상태 추가 가능
+    - 함수형 컴포넌트에서 라이프 사이클 메서드 사용 가능
+    - useState, useEffect 등등
 - 정적 가져오기
+    - 일반적인 import 통한 컴포넌트 참조 방법
+    - import 와 동시에 단일 번들링에 포함되어 번들 사이즈를 크게 만들 수 있음
 - 동적 가져오기
+    - Suspense와 lazy를 통하여 코드 스플리팅을 통해 동적으로 가져옴
+    - 동적으로 가져오면 렌더링이 필요할때 필요한 코드 조각만 가져올 수 있음
+    - SSR 환경에서 Suspense를 지원하지 않을때 (리액트 18 이전) 대안으로 Loadable-components라는 라이브러리를 사용
 - 코드 스플리팅
-- PRPL 패턴
+    - 경로 별로 코드 스플리팅 하여 초기 로딩을 줄이는걸 권장
+    - 번들 분할
+        - 장점
+            - 첫 콘텐츠가 사용자 화면에 표시되는 시간(FCP)을 단축시킴
+            - 가장 큰 콘텐츠가 화면에 랜더링 되는 시간 (LCP) 지표 개선선
+- PRPL(push Render Pre-cache Lazy-load) 패턴
+    - 저사양 기기나 인터넷이 불안정한 지역에서도 애플리케이션을 최대한 효율적으로 로드 될 수 있게 하는 패턴
+        - 핵심  고려사항
+            - 푸시 : 중요한 리소스를 효율적으로 푸시하여 서버 왕복 횟수를 최소화하고 로딩 시간을 단축시킴
+                - 브라우저는 어떤 리소스가 중요한지 모르니 preload를 통해 중요한 리소스를 로드하는 시간을 최적화화
+                ```html
+                <link rel="preload" href="/main.js" as="script">
+                <link rel="preload" href="/styles.css" as="style">
+                ```
+            - 렌더링 : 사용자 경험을 개선하기 위해 초기 경로를 최대한 빠르게 렌더링
+                - SSR(Server-Side Rendering) 또는 CSR(Client-Side Rendering)을 사용하여 콘텐츠를 빠르게 렌더링
+            - 사전 캐싱 : 자주 방문하는 경로의 에셋을 백그라운드에서 미리 캐싱하여 서버 요청 횟수를 줄이고 더 나은 오프라인 경험을 제공
+            ```js
+            self.addEventListener('install', event => {
+            event.waitUntil(
+                caches.open('my-cache').then(cache => {
+                return cache.addAll([
+                    '/index.html',
+                    '/main.js',
+                    '/styles.css',
+                    '/image.png'
+                ]);
+                })
+            );
+            });
+            ```
+            - 지연 로딩 : 자주 요청되지 않는 경로나 에셋은 지연 로딩
+            ```js
+            <img src="placeholder.jpg" data-src="real-image.jpg" loading="lazy" alt="Lazy loaded image">
+            ```
+    - 초기 로드 후 서비스 워커를 사용하여 해당 리소스를 캐시함
+    - 패턴이라기 보단 개발 방법론 같음
 - 로딩 우선순위
+    - 로딩 우선순위 패턴은 필요하다고 예상되는 특정 리소스를 우선적으로 요청하도로 설정
+    - SPA의 Preload
+        - webpack 의 preload 기능을 통해서 js에서 preload 컴포넌트 지정 가능
+        ```js
+        const EmojiPicker = import(/* webpackPreload: true */ "./EmojiPicker")
 
+        // 빌드 결과
+        <link rel="prefetch" href="emoji-picker.bundle.js" as="script">
+        ```
+    - Preload + async 기법
+        - 스크립트를 높은 우선순위로 다운로드하면서도, 스크립트를 기다리는 동안 파싱이 멈추지 않도록 하기 위한 방법
+        ```html
+        <link rel="preload" href="emoji-picker.js" as="script" />
+
+        <script src="emoji-picker.js" async></script>
+        ```
+- 리스트 가상화
+    - 대규모 데이터를 렌더링해야할때 보이는 영역만 먼저 동적으로 렌더링하는 기술
+    - 리액트에서는 `react-virtualized`, `react-window` 라이브러리를 사용하여 구현 간소화화
+    - 최신 브라우저에서는 `content-visibility` CSS 속성을 통해서 화면 밖 콘텐츠와 페인팅이 필요한 시점까지 지연 가능
+        
 
 #### 👀 인사이트
 
+HTTP/1.1 에서는 클라이언트와 서버 간의 연결이 최대 6개
+- 이런 문제를 통해 blocking 되는 경우 HOL Blocking 이라고함
+
+
+Magic Comments
+
+- 아래 코드와 같이 웹팹에서 번들링 되기전 주석으로 옵션을 줄 수 있는지 처음알았음
+정식 명칭은 Webpack의 import 문법의 [Magic Comments](https://webpack.kr/api/module-methods/#magic-comments) 라고함
+    ```js
+    const EmojiPicker = import(/* webpackPreload: true */ "./EmojiPicker")
+
+    // 빌드 결과
+    <link rel="prefetch" href="emoji-picker.bundle.js" as="script">
+    ```
