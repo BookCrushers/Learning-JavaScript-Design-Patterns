@@ -140,7 +140,7 @@ const result = Array.from(
 );
 ```
 
-아래와 같이 파이프라인 연산자 ((TC39 제안)[https://tc39.es/proposal-pipeline-operator/])을 사용하면 함수를 사용하려는 순서대로 처음에 filter가 오는걸 볼 수 있다.
+아래와 같이 파이프라인 연산자 [TC39 제안](https://tc39.es/proposal-pipeline-operator/)을 사용하면 함수를 사용하려는 순서대로 처음에 filter가 오는걸 볼 수 있다.
 
 ```js
 const result =
