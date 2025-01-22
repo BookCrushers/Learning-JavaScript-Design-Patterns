@@ -175,6 +175,7 @@ CommonJS
 - Node.js에서 기본적으로 사용하는 모듈 시스템.
 - 동기적으로 모듈을 로드(런타임에 종속성 결정).
 - require와 module.exports를 사용.
+
   ```js
   // 선언
   function foo() {
@@ -223,12 +224,11 @@ CJS
   ```
 
 - unwrapping module
-- 위와같은 함수로 감싸지지 않은 상태로 실행되는 모듈 모듈 코드가 별도의 함수 스코프 없이 실행
-
-```js
-// example.js (언래핑된 모듈)
-console.log("This code runs in the global scope.");
-```
+  - 위와같은 함수로 감싸지지 않은 상태로 실행되는 모듈 모듈 코드가 별도의 함수 스코프 없이 실행
+  ```js
+  // example.js (언래핑된 모듈)
+  console.log("This code runs in the global scope.");
+  ```
 
 CommonJS에서 언래핑된 모듈을 지원하는 이유
 
