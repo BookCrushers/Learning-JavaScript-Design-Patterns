@@ -17,8 +17,8 @@
 - [x] Day6 - Chapter8
 - [x] Day7 - Chapter9
 - [x] Day8 - Chapter10
-- [ ] Day9 - Chapter11
-- [ ] Day10 - Chapter12
+- [x] Day9 - Chapter11
+- [x] Day10 - Chapter12
 - [ ] Day11 - Chapter13
 - [ ] Day12 - Chapter14
 - [ ] Day13 - Chapter15, 회고 1
