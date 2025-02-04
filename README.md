@@ -19,10 +19,10 @@
 - [x] Day8 - Chapter10
 - [x] Day9 - Chapter11
 - [x] Day10 - Chapter12
-- [ ] Day11 - Chapter13
-- [ ] Day12 - Chapter14
-- [ ] Day13 - Chapter15, 회고 1
-- [ ] Day14 - 블로그 후기 작성 후 회고 2
+- [x] Day11 - Chapter13
+- [x] Day12 - Chapter14
+- [x] Day13 - Chapter15, 회고 1
+- [x] Day14 - 블로그 후기 작성 후 회고 2
 
 ### 세부 사항
 - 책 읽고, 인사이트 작성
